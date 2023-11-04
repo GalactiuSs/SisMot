@@ -1,8 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using SisMot.Data;
+using SisMot.Repositories;
+using SisMot.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<DbsisMotContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IMotelRepository, MotelService>();
+    
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
