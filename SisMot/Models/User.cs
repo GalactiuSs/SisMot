@@ -19,7 +19,6 @@ public partial class User
     public string UserName { get; set; } = null!;
 
     [Column("password")]
-    [StringLength(50)]
     [Unicode(false)]
     public string Password { get; set; } = null!;
 
@@ -27,6 +26,10 @@ public partial class User
     [StringLength(30)]
     [Unicode(false)]
     public string Role { get; set; } = null!;
+
+    [Column("codeRecovery")]
+    [Unicode(false)]
+    public string? codeRecovery { get; set; }
 
     [ForeignKey("Id")]
     [InverseProperty("User")]

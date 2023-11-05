@@ -1,0 +1,79 @@
+﻿@using SisMot.Models.CustomModels
+@model LoginDTO
+
+<div class="container my-5">
+
+    <div class="row justify-content-center">
+        <h1>BIENVENIDO</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card-body">
+                <form asp-action="Login" asp-controller="Access">
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario:</label>
+                        <input type="text" id="username" asp-for="userName" class="form-control" required placeholder="Ingrese su usuario">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" asp-for="password" class="form-control" required placeholder="Ingrese su contraseña">
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-block" value="Iniciar sesión"/>
+                </form>
+                <div class="mt-3 d-flex justify-content-between">
+                    <button
+                        class="btn btn-primary"
+                        data-id=""
+                            data-toggle="modal"
+                            data-target="#modalEmail">
+                        ¿Has olvidado tu contraseña?
+                    </button>
+                    <a asp-action="Register" asp-controller="Access">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEmail">
+    <div class=" modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Recuperación de contraseña</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <form>
+                            <div class="form-group">
+                                <label for="txtName" class="control-label">Correo electrónico:</label>
+                                <input type="text" id="txtEmail" class="form-control" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-center modal-footer">
+                <button type="button" class="btn btn-success" onclick="recoveryPassword()" data-dismiss="modal">Solicitar token</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        const txtEmail = document.getElementById('txtEmail');
+
+        function recoveryPassword() {
+            let email = txtEmail.value;
+            fetch(`/Access/PasswordRecovery?email=${email}`)
+            .then(res => {
+                if(res.redirected){
+                    window.location.href = res.url;
+                }
+            })
+            .catch(err => console.error(err))
+        }
+    </script>
+}

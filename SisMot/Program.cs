@@ -12,7 +12,8 @@ builder.Services.AddDbContext<DbsisMotContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IMotelRepository, MotelService>();
-    
+builder.Services.AddScoped<IAccess, AccessService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Motel}/{action=Index}");
+    pattern: "{controller=Access}/{action=Login}");
 
 app.Run();
