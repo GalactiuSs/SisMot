@@ -13,6 +13,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IMotelRepository, MotelService>();
 builder.Services.AddScoped<IAccess, AccessService>();
+builder.Services.AddScoped<IRequestRepository, RequestService>();
+builder.Services.AddScoped<IRequestMotelRepository, RequestMotelService>();
 
 var app = builder.Build();
 

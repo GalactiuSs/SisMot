@@ -16,11 +16,6 @@ namespace SisMot.Controllers
             return View(getMotels);
         }
 
-        public IActionResult New()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Details(int id)
         {
             var viewMotel = await _motelRepository.GetMotel(id);
@@ -31,28 +26,13 @@ namespace SisMot.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(Motel motel)
-        {
-            if (ModelState.IsValid)
-            {
-                var motelCreated = await _motelRepository.CreateMotel(motel);
-                if (motelCreated is not false)
-                {
-                    return RedirectToAction("Index", "Motel");
-                }
-                return View();
-            }
-            return View();
-        }
-
         public IActionResult Edit()
         {
             return View();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(int id, Motel motel)
+        public async Task<IActionResult> Edit(int id, Motel motel)
         {
             if (ModelState.IsValid)
             {

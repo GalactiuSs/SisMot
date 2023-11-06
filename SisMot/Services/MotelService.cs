@@ -60,7 +60,6 @@ namespace SisMot.Services
             var findMotel = await GetMotel(id);
             if (findMotel != null)
             {
-
                 _context.Entry(motel).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return true;
