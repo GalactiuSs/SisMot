@@ -7,7 +7,7 @@ namespace SisMot.Repositories
     public interface IAccess
     {
         Task<bool> CreatePerson(Person person, User user, string confirmPassword);
-        Task<bool> Login(LoginDTO login);
+        Task<User> Login(LoginDTO login);
         Task<int> RecoveryPassword(string email);
         Task<bool> ChangePassword(string newPassword, string confirmPassword, string code, int id);
     }

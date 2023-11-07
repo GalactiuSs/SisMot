@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SisMot.Helpers;
 using SisMot.Models;
 using SisMot.Models.CustomModels;
 using SisMot.Repositories;
@@ -8,17 +9,27 @@ namespace SisMot.Controllers;
 public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
-    
-    public RequestController(IRequestMotelRepository requestRepository) => _requestRepository = requestRepository;
+    private readonly IRequestRepository _requestSingleRepository;
+    private readonly BingMap bingMap;
+
+    public RequestController(IRequestMotelRepository requestRepository, BingMap bingMap, IRequestRepository requestSingleRepository)
+    {
+        _requestRepository = requestRepository;
+        this.bingMap = bingMap;
+        _requestSingleRepository = requestSingleRepository;
+    }
+
     
     // GET
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var getRequest = await _requestSingleRepository.GetAllRequest();
+        return View(getRequest);
     }
 
     public IActionResult SendRequest()
     {
+        ViewBag.ApiKey = bingMap.Key;
         return View();
     }
 

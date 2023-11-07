@@ -56,15 +56,15 @@ namespace SisMot.Services
             return UserName;
        }
           
-        public async Task<bool> Login(LoginDTO login)
+        public async Task<User> Login(LoginDTO login)
         {
             string newPassword = GetSHA256(login.password);
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == login.userName && u.Password == newPassword);
             if (user == null)
             {
-                return false;
+                return null!;
             }
-            return true;
+            return user;
         }
 
         private string GetSHA256(string str)

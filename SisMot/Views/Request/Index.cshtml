@@ -1,16 +1,31 @@
-@{
-    Layout = null;
-}
+@model List<PersonRequest> 
 
-<!DOCTYPE html>
+<h1>Solicitudes</h1>
+<hr>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
-</div>
-</body>
-</html>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha de envío</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var request in Model)
+        {
+            <tr>
+                <td>@request.ApplicationDate</td>
+                @if(request.StatusRequest == 0)
+                {
+                    <td>Pendiente</td>
+                }
+                <td>
+                    <button class="btn btn-warning">Ver solicitud</button>
+                    <button class="btn btn-success">Aceptar</button>
+                    <button class="btn btn-danger">Rechazar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

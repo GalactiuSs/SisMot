@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using SisMot.Models;
 using SisMot.Models.CustomModels;
 using SisMot.Repositories;
+using System.Security.Claims;
 
 namespace SisMot.Controllers
 {
@@ -20,8 +23,17 @@ namespace SisMot.Controllers
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var login = await _access.Login(loginDTO);
-            if (login is true)
+            if (login is not null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, login.Id.ToString()),
+                    new Claim(ClaimTypes.Role, login.Role)  
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 return RedirectToAction("Index", "Motel");
+            }
             return View();
         }
 
@@ -78,6 +90,13 @@ namespace SisMot.Controllers
             if (changePassword is true)
                 return RedirectToAction("Login", "Access");
             return View();
+        }
+
+
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Access");
         }
     }
 }

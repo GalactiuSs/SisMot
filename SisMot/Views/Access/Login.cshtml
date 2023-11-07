@@ -1,34 +1,52 @@
-﻿@using SisMot.Models.CustomModels
+﻿@{
+    Layout = null;
+}
+@using SisMot.Models.CustomModels
 @model LoginDTO
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
-<div class="container my-5">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css">
 
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    
+<div class="container my-5" >
     <div class="row justify-content-center">
-        <h1>BIENVENIDO</h1>
+        <h1  style="color: burlywood; font-family: Oswald; font-size:80px;">B I E N V E N I D O</h1>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card-body">
                 <form asp-action="Login" asp-controller="Access">
                     <div class="form-group">
-                        <label for="username">Nombre de Usuario:</label>
-                        <input type="text" id="username" asp-for="userName" class="form-control" required placeholder="Ingrese su usuario">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="username">U s u a r i o:</label>
+                        <input type="text" id="username"  asp-for="userName" class="form-control" required placeholder="Ingrese su usuario">
                     </div>
                     <div class="form-group">
-                        <label for="password">Contraseña:</label>
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="password">C o n t r a s e ña:</label>
                         <input type="password" id="password" asp-for="password" class="form-control" required placeholder="Ingrese su contraseña">
                     </div>
-                    <input type="submit" class="btn btn-primary btn-block" value="Iniciar sesión"/>
+                        <input style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan" type="submit" class="btn btn-primary btn-block" value="Iniciar sesión" />
                 </form>
                 <div class="mt-3 d-flex justify-content-between">
-                    <button
+                        <button style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;"
                         class="btn btn-primary"
                         data-id=""
                             data-toggle="modal"
                             data-target="#modalEmail">
                         ¿Has olvidado tu contraseña?
                     </button>
-                    <a asp-action="Register" asp-controller="Access">Registrarse</a>
+
+                        <a class="btn" style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;" asp-action="Register" asp-controller="Access">Registrarse</a>
                 </div>
             </div>
         </div>
@@ -77,3 +95,5 @@
         }
     </script>
 }
+</body>
+</html>
