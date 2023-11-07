@@ -1,16 +1,116 @@
-@{
-    Layout = null;
-}
+@using SisMot.Helpers
+@using SisMot.Models.CustomModels
+@inject BingMap bing
+@model NewRequestDTO 
+<div class="col-md-8">
+    <h3>Formulario de Información del Motel</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <form>
+                <!-- Información general del motel -->
+                <h4>Información general del motel</h4>
+                <div class="form-group">
+                    <label>Nombre del Motel:</label>
+                    <input type="text" class="form-control" id="txtMotelName" required placeholder="Ingrese el nombre del Motel">
+                </div>
+                <div class="form-group">
+                    <label for="descripcionMotel">Breve descripción y ambiente:</label>
+                    <textarea class="form-control" rows="4" id="txtDescriptionMotel" required placeholder="Ingrese los detalles de las habitaciones"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Precio:</label>
+                    <input type="number" class="form-control" id="txtMotelPrice" required placeholder="Ingrese el precio por hora de la habitacion">
+                </div>
+                <div class="form-group">
+                    <label>Numero de Celular:</label>
+                    <input type="number" class="form-control" id="txtPhone" required placeholder="Ingrese el numero de Celular">
+                </div>
+                @*<div class="form-group">
+                <label>Dirección completa:</label>
+                <input type="text" class="form-control">
+                </div>*@
+                <div class="form-group">
+                    <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
+                    <input type="file" class="form-control-file" id="fotosHabitaciones" multiple accept="image/*">
+                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
+                </div>
 
-<!DOCTYPE html>
+                <input type="hidden" id="Latitude">
+                <input type="hidden" id="Longitude">
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+                <button class="btn btn-success" onclick="sendData()">Enviar Solicitud</button>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div id="map" style="width: 700px; height: 700px;"></div>
+
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts
+{
+    <script type='text/javascript'>
+
+        const txtLongintude = document.getElementById("Longitude")
+        const txtLatitude = document.getElementById("Latitude")
+        
+        const txtMotelName = document.getElementById('txtMotelName')
+        const txtDescriptionMotel = document.getElementById('txtDescriptionMotel')
+        const txtMotelPrice = document.getElementById('txtMotelPrice')
+        const txtPhone = document.getElementById('txtPhone')
+
+        function loadMapScenario() {
+            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                credentials: '@bing.Key'
+            });
+            Microsoft.Maps.Events.addHandler(map,'click', (e) => {
+                map.entities.clear();
+                
+                var location = e.location;
+                // Crea un pin en esa ubicación
+                var pin = new Microsoft.Maps.Pushpin(location);
+                // Añade el pin al mapa
+                map.entities.push(pin)
+                txtLongintude.value = location.longitude
+                txtLatitude.value = location.latitude
+            })
+        }
+        
+        const sendData = () => {
+            let requestDto = {
+                motelName: undefined,
+                motelDescription: undefined,
+                motelPrice: undefined,
+                motelPhoneNumber: undefined,
+                motelLatitude: undefined,
+                motelLongitude: undefined,
+                requestApplicationDate: undefined,
+                statusRequest: 0
+            }
+
+            requestDto.motelName = txtMotelName.value
+            requestDto.motelDescription = txtDescriptionMotel.value
+            requestDto.motelPrice = txtMotelPrice.value
+            requestDto.motelPhoneNumber = txtPhone.value
+            requestDto.motelLatitude = txtLatitude.value
+            requestDto.motelLongitude = txtLongintude.value
+
+            fetch('/Request/SendRequest', {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json;charset=utf8'
+                },
+                body: JSON.stringify(requestDto)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.redirected){
+                    window.location.href = res.url
+                }
+            })
+            .catch(err => console.error(err))
+        }
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>
+}

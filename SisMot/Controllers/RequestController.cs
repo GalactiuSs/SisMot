@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SisMot.Helpers;
 using SisMot.Models;
 using SisMot.Models.CustomModels;
 using SisMot.Repositories;
@@ -8,8 +9,14 @@ namespace SisMot.Controllers;
 public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
-    
-    public RequestController(IRequestMotelRepository requestRepository) => _requestRepository = requestRepository;
+    private readonly BingMap bingMap;
+
+    public RequestController(IRequestMotelRepository requestRepository, BingMap bingMap)
+    {
+        _requestRepository = requestRepository;
+        this.bingMap = bingMap;
+    }
+
     
     // GET
     public IActionResult Index()
@@ -19,6 +26,8 @@ public class RequestController : Controller
 
     public IActionResult SendRequest()
     {
+        ViewBag.ApiKey = bingMap.Key;
+
         return View();
     }
 
@@ -26,7 +35,6 @@ public class RequestController : Controller
     public async Task<IActionResult> SendRequest(NewRequestDTO requestDto)
     {
         requestDto.RequestApplicationDate = DateTime.Today;
-        requestDto.StatusRequest = 0;
         Motel motel = new()
         {
             Name = requestDto.MotelName,
