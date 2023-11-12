@@ -10,7 +10,7 @@
     <h3>Formulario de Información del Motel</h3>
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="SendRequest" asp-controller="Request" method="post">
+            <form asp-action="SendRequest" asp-controller="Request" method="post" enctype="multipart/form-data">
                 <!-- Información general del motel -->
                 <h4>Información general del motel</h4>
                 <div class="form-group">
@@ -29,13 +29,15 @@
                     <label>Numero de Celular:</label>
                     <input type="number" class="form-control" asp-for="MotelPhoneNumber" required placeholder="Ingrese el numero de Celular">
                 </div>
+                
                 <div class="form-group">
                     <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
-                    <input type="file" class="form-control-file" id="fotosHabitaciones" name="fotosHabitaciones[]" multiple accept="image/*">
+                    <input type="file" class="form-control-file" asp-for="Photos" multiple accept="image/*">
                     <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
                 </div>
-                <input asp-for="MotelLatitude" id="txtLatitude" type="number" step="any"/>
-                <input asp-for="MotelLongitude" id="txtLongitude" type="number" step="any" />
+                
+                <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any"/>
+                <input asp-for="MotelLongitude" id="txtLongitude" type="number" style="display: none" step="any" />
                 <input type="submit" class="btn btn-success" value="Enviar solicitud"/>
             </form>
         </div>

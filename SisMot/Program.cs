@@ -26,6 +26,7 @@ builder.Services.AddScoped<IMotelRepository, MotelService>();
 builder.Services.AddScoped<IAccess, AccessService>();
 builder.Services.AddScoped<IRequestRepository, RequestService>();
 builder.Services.AddScoped<IRequestMotelRepository, RequestMotelService>();
+builder.Services.AddScoped<IPhotoRepository, PhotoService>();   
 
 var bingKey = builder.Configuration["BingKey"];
 builder.Services.AddSingleton(new BingMap(bingKey));

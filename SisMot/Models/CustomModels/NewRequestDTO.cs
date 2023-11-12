@@ -6,6 +6,7 @@ public class NewRequestDTO
     public string MotelDescription { get; set; }
     public string MotelPrice { get; set; }
     public string MotelPhoneNumber { get; set; }
+    public List<IFormFile> Photos { get; set; } //imagenes del motel
     public double MotelLatitude { get; set; }
     public double MotelLongitude { get; set; }
     public DateTime RequestApplicationDate { get; set; }

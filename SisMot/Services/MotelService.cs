@@ -66,5 +66,11 @@ namespace SisMot.Services
             }
             return false;
         }
+
+        public async Task<List<Motel>> GetMotelsByOwner(int id)
+        {
+            var motels = await _context.Motels.Where(motel => motel.PersonId == id).ToListAsync();
+            return motels;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SisMot.Models;
 using SisMot.Repositories;
+using System.Security.Claims;
 
 namespace SisMot.Controllers
 {
@@ -26,9 +27,10 @@ namespace SisMot.Controllers
             return View();
         }
 
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var getMotel = await _motelRepository.GetMotel(id);
+            return View(getMotel);
         }
 
         [HttpPut]
@@ -55,5 +57,14 @@ namespace SisMot.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> GetMotelsByOwner()
+        {
+            var ownerID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var motelByOwner = await _motelRepository.GetMotelsByOwner(int.Parse(ownerID));
+            return View(motelByOwner);
+        }
+
+
     }
 }

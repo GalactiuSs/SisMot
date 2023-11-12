@@ -53,7 +53,7 @@ public class RequestController : Controller
             StatusRequest = requestDto.StatusRequest,
             ApplicationDate = requestDto.RequestApplicationDate
         };
-        var send = await _requestRepository.AddMotelWithRequest(motel, request);
+        var send = await _requestRepository.AddMotelWithRequest(motel, request, requestDto.Photos);
         if (send is not false)
             return RedirectToAction("Index", "Motel");
         return View();

@@ -18,5 +18,32 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-image: url('../Resources/img/fondo1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom: 60px;
 }
+
+/*card {
+    width: 150px;
+    height: 150px;
+}*/
+
+/*.lateral {
+    margin-inline: auto;
+    padding-inline-start: var(--explore_padding-inline);
+    padding-inline-end: var(--explore_padding-inline);
+    background: var(--f-mkcy-f);
+}*/
+
+/*.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin:10px;
+}
+
+card {
+    width: 150px;
+    height: 150px;
+}*/

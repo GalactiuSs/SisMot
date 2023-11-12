@@ -5,5 +5,5 @@ namespace SisMot.Repositories;
 
 public interface IRequestMotelRepository
 {
-    Task<bool> AddMotelWithRequest(Motel motel, PersonRequest request);
+    Task<bool> AddMotelWithRequest(Motel motel, PersonRequest request, List<IFormFile> photos);
 }

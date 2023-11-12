@@ -1,0 +1,77 @@
+@model Motel
+@using SisMot.Helpers
+@using SisMot.Models.CustomModels
+@inject BingMap bing
+
+<div class="col-md-8">
+    <h3>Formulario de Información del Motel</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="SendRequest" asp-controller="Request" method="post" enctype="multipart/form-data">
+                <!-- Información general del motel -->
+                <h4>Información general del motel</h4>
+                <div class="form-group">
+                    <label>Nombre del Motel:</label>
+                    <input type="text" class="form-control" asp-for="Name" required placeholder="Ingrese el nombre del Motel">
+                </div>
+                <div class="form-group">
+                    <label for="descripcionMotel">Breve descripción y ambiente:</label>
+                    <textarea class="form-control" rows="4" asp-for="Description" required placeholder="Ingrese los detalles de las habitaciones"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Precio:</label>
+                    <input type="number" class="form-control" asp-for="Price" required placeholder="Ingrese el precio por hora de la habitacion">
+                </div>
+                <div class="form-group">
+                    <label>Numero de Celular:</label>
+                    <input type="number" class="form-control" asp-for="PhoneNumber" required placeholder="Ingrese el numero de Celular">
+                </div>
+                
+                @*<div class="form-group">
+                    <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
+                    <input type="file" class="form-control-file" asp-for="MotelPhotos" multiple accept="image/*">
+                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
+                </div>*@
+                
+                <input asp-for="Latitude" id="txtLatitude" type="number" style="display: none" step="any"/>
+                <input asp-for="Longitude" id="txtLongitude" type="number" style="display: none" step="any" />
+                <input type="submit" class="btn btn-success" value="Enviar solicitud"/>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div id="map" dropzone="" style="width: 700px; height: 700px;"></div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type='text/javascript'>
+
+        const txtLatitude = document.getElementById('txtLatitude');
+        const txtLongitude = document.getElementById('txtLongitude');
+
+        function loadMapScenario() {
+            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                center: new Microsoft.Maps.Location(-17.393496874429385, -66.15692841770928),
+                credentials: '@bing.Key',
+                zoom: 17
+            });
+            Microsoft.Maps.Events.addHandler(map,'click', (e) => {
+                map.entities.clear();
+                
+                var location = e.location;
+                
+                // Crea un pin en esa ubicación
+                var pin = new Microsoft.Maps.Pushpin(location);
+
+                // Añade el pin al mapa
+                map.entities.push(pin)
+                txtLatitude.value = location.latitude;
+                txtLongitude.value = location.longitude;
+            })
+        }
+    </script>
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>
+}

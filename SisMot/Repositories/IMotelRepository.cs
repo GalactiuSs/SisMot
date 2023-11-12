@@ -10,5 +10,6 @@ namespace SisMot.Repositories
         Task<bool> DeleteMotel(int id);
         Task<List<Motel>> GetAllMotels();
         Task<Motel> GetMotel(int id);
+        Task<List<Motel>> GetMotelsByOwner(int id);
     }
 }
