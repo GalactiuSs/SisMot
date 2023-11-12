@@ -9,6 +9,7 @@ namespace SisMot.Controllers;
 public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
+
     private readonly IRequestRepository _requestSingleRepository;
     private readonly BingMap bingMap;
 
@@ -37,7 +38,6 @@ public class RequestController : Controller
     public async Task<IActionResult> SendRequest(NewRequestDTO requestDto)
     {
         requestDto.RequestApplicationDate = DateTime.Today;
-        requestDto.StatusRequest = 0;
         Motel motel = new()
         {
             Name = requestDto.MotelName,

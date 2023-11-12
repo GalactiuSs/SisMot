@@ -1,4 +1,4 @@
-﻿@using SisMot.Helpers
+@using SisMot.Helpers
 @inject BingMap bing
 @{
     ViewData["Title"] = "SISMOT";
@@ -11,7 +11,7 @@
 <div class="separador"></div>
 
 <!-- Comboboxes con etiquetas más pequeñas -->
-<div class="container md-5 ml-6">
+@* <div class="container md-5 ml-6">
     <!-- Agregar ml-0 aquí -->
     <div class="row">
         <div class="col-md-5 d-flex flex-row align-items-center">
@@ -23,19 +23,19 @@
         </div>
 
     </div>
-</div>
+</div> *@
 
 <br>
 <div class="container-fluid">
     <div class="row">
 
         <div class="col-md-6">
-           @* <div class="lateral">
-                <div class="card" style=" width:320px; height:320px;">
-                    <img style=" width:300px; height:300px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen de la card" />
-                    <h4 style=" margin:10px;">Pestana Cr7</h4>
-                    <p style=" margin:10px;"><b>Precio: </b>Bs.75 Hora</p>
-                </div>
+            @* <div class="lateral">
+            <div class="card" style=" width:320px; height:320px;">
+            <img style=" width:300px; height:300px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen de la card" />
+            <h4 style=" margin:10px;">Pestana Cr7</h4>
+            <p style=" margin:10px;"><b>Precio: </b>Bs.75 Hora</p>
+            </div>
             </div>*@
             <div class="container">
                 <div class="card">
@@ -58,14 +58,10 @@
                     <h4>Título 4</h4>
                     <p>Párrafo 4</p>
                 </div>
-                <div class="card">
-                    <img src="../Resources/img/motel2.jpg" alt="Imagen 3">
-                    <h4>Título 5</h4>
-                    <p>Párrafo 5</p>
-                </div>
+
             </div>
         </div>
-        
+
 
         <div class="col-md-4">
             <div id="map" dropzone="" style="width: 700px; height: 700px;"></div>

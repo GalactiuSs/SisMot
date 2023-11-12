@@ -31,6 +31,7 @@ builder.Services.AddScoped<IPhotoRepository, PhotoService>();
 var bingKey = builder.Configuration["BingKey"];
 builder.Services.AddSingleton(new BingMap(bingKey));
 
+
 var app = builder.Build();
 
 
@@ -53,5 +54,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Access}/{action=Login}");
+
 
 app.Run();
