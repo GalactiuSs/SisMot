@@ -1,24 +1,21 @@
-@*@{
-    Layout = null;
-}*@
 @using SisMot.Helpers
 @using SisMot.Models.CustomModels
 @inject BingMap bing
 @model NewRequestDTO
 
 <div class="col-md-8">
-    <h3>Formulario de Informaci髇 del Motel</h3>
+    <h3>Formulario de Informaci贸n del Motel</h3>
     <div class="row">
         <div class="col-md-8">
             <form asp-action="SendRequest" asp-controller="Request" method="post" enctype="multipart/form-data">
-                <!-- Informaci髇 general del motel -->
-                <h4>Informaci髇 general del motel</h4>
+                <!-- Informaci贸n general del motel -->
+                <h4>Informaci贸n general del motel</h4>
                 <div class="form-group">
                     <label>Nombre del Motel:</label>
                     <input type="text" class="form-control" asp-for="MotelName" required placeholder="Ingrese el nombre del Motel">
                 </div>
                 <div class="form-group">
-                    <label for="descripcionMotel">Breve descripci髇 y ambiente:</label>
+                    <label for="descripcionMotel">Breve descripci贸n y ambiente:</label>
                     <textarea class="form-control" rows="4" asp-for="MotelDescription" required placeholder="Ingrese los detalles de las habitaciones"></textarea>
                 </div>
                 <div class="form-group">
@@ -32,12 +29,23 @@
 
                 <div class="form-group">
                     <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
+                </div>
+                @*<div>
                     <input type="file" class="form-control-file" asp-for="Photos" multiple accept="image/*">
-                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias im醙enes (formato JPG, PNG, o GIF).</small>
+                </div>*@
+                <div>
+                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias im谩genes (formato JPG, PNG, o GIF).</small>
+                </div>
+                <div>
+                    <input class="images" type="file" id="imagenInput" asp-for="Photos" multiple accept="image/*" onchange="mostrarVistaPrevia()" />
+                </div>
+                <div >
+                    <div id="vistaPrevia"></div>
                 </div>
 
                 <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any" />
                 <input asp-for="MotelLongitude" id="txtLongitude" type="number" style="display: none" step="any" />
+                <br/>
                 <input type="submit" class="btn btn-success" value="Enviar solicitud" />
             </form>
         </div>
@@ -66,10 +74,10 @@
 
                 var location = e.location;
 
-                // Crea un pin en esa ubicaci髇
+                // Crea un pin en esa ubicaci贸n
                 var pin = new Microsoft.Maps.Pushpin(location);
 
-                // A馻de el pin al mapa
+                // A帽ade el pin al mapa
                 map.entities.push(pin)
                 txtLatitude.value = location.latitude;
                 txtLongitude.value = location.longitude;
@@ -77,4 +85,24 @@
         }
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>
+    <script>
+        function mostrarVistaPrevia() {
+            var input = document.getElementById('imagenInput');
+            var vistaPrevia = document.getElementById('vistaPrevia');
+            vistaPrevia.innerHTML = '';
+
+            for (var i = 0; i < input.files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imagen = document.createElement('img');
+                    imagen.src = e.target.result;
+                    imagen.width = 140;
+                    imagen.height = 140;
+                    vistaPrevia.appendChild(imagen);
+                };
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+    </script>
+
 }

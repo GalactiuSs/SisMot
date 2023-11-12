@@ -9,7 +9,6 @@ namespace SisMot.Controllers;
 public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
-
     private readonly IRequestRepository _requestSingleRepository;
     private readonly BingMap bingMap;
 
@@ -57,5 +56,29 @@ public class RequestController : Controller
         if (send is not false)
             return RedirectToAction("Index", "Motel");
         return View();
+    }
+
+    public async Task<IActionResult> GetRequestByDetails(int requestId)
+    {
+        var getMotelWithPhotos = await _requestRepository.GetRequestWithDetails(requestId);
+        if (getMotelWithPhotos is not null)
+            return Ok(getMotelWithPhotos);
+        return NotFound();
+    }
+
+    public async Task<IActionResult> AcceptRequest(int requestId)
+    {
+        var accepted = await _requestSingleRepository.AcceptRequest(requestId, 1);
+        if (accepted)
+            return Ok();
+        return NotFound();
+    }
+    
+    public async Task<IActionResult> RejectRequest(int requestId)
+    {
+        var rejected = await _requestSingleRepository.AcceptRequest(requestId, 2);
+        if (rejected)
+            return Ok();
+        return NotFound();
     }
 }

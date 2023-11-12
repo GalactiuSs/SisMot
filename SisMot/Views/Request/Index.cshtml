@@ -1,4 +1,6 @@
+@using SisMot.Helpers
 @model List<PersonRequest>
+@inject BingMap bing
 
 <h1>Solicitudes</h1>
 <hr>
@@ -6,7 +8,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Fecha de envío</th>
+            <th>Fecha de envï¿½o</th>
             <th>Estado</th>
             <th>Proveedor</th>
         </tr>
@@ -16,27 +18,17 @@
         {
             <tr>
                 <td>@request.ApplicationDate.ToShortDateString()</td>
-                @if (request.StatusRequest == 0)
-                {
-                    <td>Pendiente</td>
-                }
+                    @if (request.StatusRequest == 0)
+                    {
+                        <td>Pendiente</td>
+                    }
                 <td>
-                    @*<div class="mt-3 d-flex justify-content-between">
-                <button class="btn btn-warning"
-                data-id="@request.Id"
-                data-toggle="modal"
-                data-target="#modalRequest">
-                Ver solicitud
-                </button>
-
-                <button class="btn btn-success">Aceptar</button>
-                <button class="btn btn-danger">Rechazar</button>
-                </div>*@
-                    <button class="btn btn-warning"
-                            data-toggle="modal"
-                            data-target="#modalRequest">
-                        Ver detalles
-                    </button>
+                    <div class="mt-3 d-flex justify-content-between">
+                        <button class="btn btn-warning"
+                                onclick="showDetailsRequest(@request.Id)">
+                            Ver solicitud
+                        </button>
+                    </div>
                 </td>
             </tr>
         }
@@ -44,36 +36,7 @@
     </tbody>
 </table>
 
-<div class="modal fade" id="modalRequest">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold">Recuperación de contraseña</h5>
-            </div>
-            <div class="modal-body">
-                <input id="ResquestID" />
-            </div>
-        </div>
-    </div>
-</div>
-@*@section Scripts
-{
-    <script>
-        const txtId = document.getElementById('ResquestID')
-        document.addEventListener('DOMContentLoaded', () => {
-            var btnsDelete = document.querySelectorAll('[data-toggle="modal"]');
-            btnsDelete.forEach((button) => {
-                button.addEventListener('click', () => {
-                    var id = button.getAttribute('data-id');
-                    txtId.value = id;
-                });
-            });
-        });
-    </script>
-}*@
-
-
-@*<div class="modal fade" id="modalRequest">
+<div class="modal fade" id="modalRequestDetails">
     <div class=" modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -81,47 +44,113 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col">
-
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <input id="txtMotelId" type="number" style="display: none" />
                             <div class="form-group">
-
-                                <div class="form-group">
-                                    <label>Nombre del Motel:</label>
-                                    <input type="text" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="descripcionMotel">Breve descripción y ambiente:</label>
-                                    <textarea class="form-control" rows="4"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Precio:</label>
-                                    <input type="number" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>Numero de Celular:</label>
-                                    <input type="number" class="form-control" required placeholder="Ingrese el numero de Celular">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
-                                    <input type="file" class="form-control-file" id="fotosHabitaciones" multiple accept="image/*">
-                                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
-                                </div>
-
-                                <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any" />
-                                <input asp-for="MotelLongitude" id="txtLongitude" type="number" style="display: none" step="any" />
-
+                                <label>Nombre del Motel:</label>
+                                <input type="text" disabled id="txtMotelName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcionMotel">Breve descripciÃ³n y ambiente:</label>
+                                <textarea class="form-control" disabled id="txtMotelDescription" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Precio:</label>
+                                <input type="number" disabled id="txtMotelPrice" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Numero de Celular:</label>
+                                <input type="number" disabled class="form-control" id="txtMotelPhone">
                             </div>
 
+                            <div class="form-group">
+                                <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
+                                <input type="file" class="form-control-file" id="fotosHabitaciones" multiple accept="image/*">
+                                <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imï¿½genes (formato JPG, PNG, o GIF).</small>
+                            </div>
+                            <input id="txtMotelLatitude" type="number" style="display: none" step="any"/>
+                            <input id="txtMotelLongitude" type="number" style="display: none" step="any"/>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div id="map" dropzone="" style="width: 400px; height: 400px;"></div>
                     </div>
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-center modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar Solicitud</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Rechazar Solicitud</button>
+                <button type="button" class="btn btn-success" onclick="acceptRequest()" data-dismiss="modal">Aceptar Solicitud</button>
+                <button type="button" class="btn btn-danger" onclick="rejectRequest()" data-dismiss="modal">Rechazar Solicitud</button>
             </div>
         </div>
     </div>
 </div>
-*@
-
+@section Scripts
+{
+    <script>
+        const modalRequestDetails = document.getElementById('modalRequestDetails');
+        const txtMotelName = document.getElementById('txtMotelName');
+        const txtMotelDescription = document.getElementById('txtMotelDescription');
+        const txtMotelPrice = document.getElementById('txtMotelPrice');
+        const txtMotelPhone = document.getElementById('txtMotelPhone');
+        const txtMotelLatitude = document.getElementById('txtMotelLatitude');
+        const txtMotelLongitude = document.getElementById('txtMotelLongitude');
+        const txtMotelId = document.getElementById('txtMotelId');
+        var requestDetailModal;
+        
+        function showDetailsRequest(id){
+            txtMotelId.value = id;
+            fetch(`/Request/GetRequestByDetails?requestId=${id}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data !== null){
+                    console.log(data);
+                    requestDetailModal = new bootstrap.Modal(modalRequestDetails);
+                    txtMotelName.value = data.motelName;
+                    txtMotelDescription.value = data.motelDescription;
+                    txtMotelPrice.value = data.motelPrice;
+                    txtMotelPhone.value = data.motelPhoneNumber;
+                    loadMapScenario(data.motelLatitude, data.motelLongitude);
+                    requestDetailModal.show();
+                }
+            })
+            .catch(err => console.error(err))
+        }
+        function loadMapScenario(latitude, longitude) {
+            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+                center: new Microsoft.Maps.Location(parseFloat(latitude), parseFloat(longitude)),
+                credentials: '@bing.Key',
+                zoom: 17
+            });
+            var pinLocation = new Microsoft.Maps.Location(parseFloat(latitude), parseFloat(longitude));
+            var pin = new Microsoft.Maps.Pushpin(pinLocation);
+            map.entities.push(pin);
+        }
+        function acceptRequest(){
+            fetch(`/Request/AcceptRequest?requestId=${txtMotelId.value}`)
+            .then(res => {
+                if (res.ok){
+                    window.location.reload();
+                }
+                else {
+                    alert('El estado de la solicitud no se actualizÃ³');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+        
+        function rejectRequest(){
+            fetch(`/Request/RejectRequest?requestId=${txtMotelId.value}`)
+            .then(res => {
+                if (res.ok){
+                    window.location.reload();
+                }
+                else {
+                    alert('El estado de la solicitud no se actualizÃ³');
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    </script>
+}
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>

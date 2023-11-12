@@ -3,6 +3,8 @@ using SisMot.Data;
 using SisMot.Models;
 using SisMot.Repositories;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using SisMot.Models.CustomModels;
 
 namespace SisMot.Services;
 
@@ -53,5 +55,35 @@ public class RequestMotelService : IRequestMotelRepository
             }
         }
         return false;
+    }
+
+    public async Task<MotelPhotosDTO> GetRequestWithDetails(int requestId)
+    {
+        var findMotelByRequestId = await _context.PersonRequests.Where(r => r.Id.Equals(requestId))
+            .Select(r => r.MotelId).FirstOrDefaultAsync();
+        var findMotel = await _context.Motels.Where(m => m.Id.Equals(findMotelByRequestId))
+            .Select(m => new Motel()
+            {
+                Name = m.Name,
+                Description = m.Description,
+                Price = m.Price,
+                PhoneNumber = m.PhoneNumber,
+                Latitude = m.Latitude,
+                Longitude = m.Longitude,
+                Id = m.Id
+            }).FirstOrDefaultAsync();
+        var joinMotelWithPhotos = await _context.MotelPhotos.Where(photo => photo.MotelId.Equals(findMotel.Id))
+            .Select(motelPathPhoto => motelPathPhoto.PathPhotoMotel).ToListAsync();
+        MotelPhotosDTO motelPhotosDto = new()
+        {
+            MotelName = findMotel.Name,
+            MotelDescription = findMotel.Description,
+            MotelPrice = findMotel.Price,
+            MotelPhoneNumber = findMotel.PhoneNumber,
+            MotelLatitude = findMotel.Latitude,
+            MotelLongitude = findMotel.Longitude,
+            MotelPhotos = joinMotelWithPhotos
+        };
+        return motelPhotosDto;
     }
 }

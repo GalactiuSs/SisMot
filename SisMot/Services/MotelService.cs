@@ -10,10 +10,12 @@ namespace SisMot.Services
     public class MotelService : IMotelRepository
     {
         private readonly DbsisMotContext _context;
+        private readonly IRequestRepository _requestRepository;
 
-        public MotelService(DbsisMotContext context)
+        public MotelService(DbsisMotContext context, IRequestRepository requestRepository)
         {
             _context = context;
+            _requestRepository = requestRepository;
         }
 
         public async Task<bool> CreateMotel(Motel motel)
@@ -41,10 +43,18 @@ namespace SisMot.Services
 
         public async Task<List<Motel>> GetAllMotels()
         {
-            var getMotels = await _context.Motels.ToListAsync();
-            if (getMotels.Count > 0)
-                return getMotels;
-            return null!;
+            var requestsList = await _requestRepository.GetAcceptedRequests();
+            var getMotels = await _context.Motels.Join(requestsList, m => m.Id, r => r.MotelId, 
+                (m, r) => new Motel()
+                {
+                    Name = m.Name,
+                    Description = m.Description,
+                    Price = m.Price,
+                    PhoneNumber = m.PhoneNumber,
+                    Latitude = m.Latitude,
+                    Longitude = m.Longitude 
+                }).Where(m => m.Status.Equals(1)).ToListAsync();
+            return getMotels;
         }
 
         public async Task<Motel> GetMotel(int id)
