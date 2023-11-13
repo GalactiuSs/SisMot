@@ -37,7 +37,7 @@
                     <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
                 </div>
                 <div>
-                    <input class="images" type="file" id="imagenInput" asp-for="Photos" multiple accept="image/*" onchange="mostrarVistaPrevia()" />
+                    <input type="file" id="imagenInput" asp-for="Photos" multiple accept="image/*" onchange="mostrarVistaPrevia()" />
                 </div>
                 <div >
                     <div id="vistaPrevia"></div>

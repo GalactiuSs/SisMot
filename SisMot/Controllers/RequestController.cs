@@ -10,15 +10,14 @@ public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
     private readonly IRequestRepository _requestSingleRepository;
-    private readonly BingMap bingMap;
+    private readonly BingMap _bingMap;
 
     public RequestController(IRequestMotelRepository requestRepository, BingMap bingMap, IRequestRepository requestSingleRepository)
     {
         _requestRepository = requestRepository;
-        this.bingMap = bingMap;
+        _bingMap = bingMap;
         _requestSingleRepository = requestSingleRepository;
     }
-
     
     // GET
     public async Task<IActionResult> Index()
@@ -29,7 +28,7 @@ public class RequestController : Controller
 
     public IActionResult SendRequest()
     {
-        ViewBag.ApiKey = bingMap.Key;
+        ViewBag.ApiKey = _bingMap.Key;
         return View();
     }
 

@@ -64,10 +64,8 @@
                                 <input type="number" disabled class="form-control" id="txtMotelPhone">
                             </div>
 
-                            <div class="form-group">
-                                <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
-                                <input type="file" class="form-control-file" id="fotosHabitaciones" multiple accept="image/*">
-                                <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias im�genes (formato JPG, PNG, o GIF).</small>
+                            <div class="form-group" id="imagesContainer">
+                                
                             </div>
                             <input id="txtMotelLatitude" type="number" style="display: none" step="any"/>
                             <input id="txtMotelLongitude" type="number" style="display: none" step="any"/>
@@ -96,9 +94,11 @@
         const txtMotelLatitude = document.getElementById('txtMotelLatitude');
         const txtMotelLongitude = document.getElementById('txtMotelLongitude');
         const txtMotelId = document.getElementById('txtMotelId');
-        var requestDetailModal;
+        const imagesContainer = document.getElementById('imagesContainer');
+        let requestDetailModal;
         
         function showDetailsRequest(id){
+            imagesContainer.innerHTML = '';
             txtMotelId.value = id;
             fetch(`/Request/GetRequestByDetails?requestId=${id}`)
             .then(res => res.json())
@@ -111,19 +111,27 @@
                     txtMotelPrice.value = data.motelPrice;
                     txtMotelPhone.value = data.motelPhoneNumber;
                     loadMapScenario(data.motelLatitude, data.motelLongitude);
+                    
+                    if (data.motelPhotos !== undefined){
+                        data.motelPhotos.forEach(path => {
+                            var image = document.createElement('img');
+                            image.src = `../${path}`;
+                            imagesContainer.appendChild(image);
+                        })
+                    }
                     requestDetailModal.show();
                 }
             })
             .catch(err => console.error(err))
         }
-        function loadMapScenario(latitude, longitude) {
-            var map = new Microsoft.Maps.Map(document.getElementById('map'), {
+        async function loadMapScenario(latitude, longitude) {
+            let map = new Microsoft.Maps.Map(document.getElementById('map'), {
                 center: new Microsoft.Maps.Location(parseFloat(latitude), parseFloat(longitude)),
                 credentials: '@bing.Key',
                 zoom: 17
             });
-            var pinLocation = new Microsoft.Maps.Location(parseFloat(latitude), parseFloat(longitude));
-            var pin = new Microsoft.Maps.Pushpin(pinLocation);
+            let pinLocation = new Microsoft.Maps.Location(parseFloat(latitude), parseFloat(longitude));
+            let pin = new Microsoft.Maps.Pushpin(pinLocation);
             map.entities.push(pin);
         }
         function acceptRequest(){
