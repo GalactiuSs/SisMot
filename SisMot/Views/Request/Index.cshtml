@@ -8,9 +8,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Fecha de env�o</th>
+            <th>Fecha de envío</th>
             <th>Estado</th>
-            <th>Proveedor</th>
+            <th>Solicitante</th>
         </tr>
     </thead>
     <tbody>
@@ -22,6 +22,9 @@
                     {
                         <td>Pendiente</td>
                     }
+                    <td>
+                        @string.Concat(request.Person.FirstName, " ", request.Person.LastName, " ", request.Person.SecondLastName)
+                    </td>
                 <td>
                     <div class="mt-3 d-flex justify-content-between">
                         <button class="btn btn-warning"
@@ -32,7 +35,6 @@
                 </td>
             </tr>
         }
-
     </tbody>
 </table>
 
@@ -117,6 +119,8 @@
                             var image = document.createElement('img');
                             image.src = `../${path}`;
                             imagesContainer.appendChild(image);
+                            image.width = 140;
+                            image.height = 140;
                         })
                     }
                     requestDetailModal.show();

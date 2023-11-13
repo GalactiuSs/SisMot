@@ -17,12 +17,20 @@ html {
   min-height: 100%;
 }
 
+.header{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+
+}
+
 body {
     background-image: url('../Resources/img/fondo1.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     margin-bottom: 60px;
 }
+
 
 /*card {
     width: 150px;

@@ -36,10 +36,7 @@
                 <div style=" margin-left:500px;" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-2">
                         <li class="nav-item" >
-                            <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Motel" asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
                             <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Request" asp-action="Index">Ver Solicitudes</a>
@@ -50,11 +47,16 @@
                         <li class="nav-item">
                             <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Motel" asp-action="GetMotelsByOwner">Mis Moteles</a>
                         </li>
-                        <li class="nav-item">
-                            <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Access" asp-action="LogOut">Salir</a>
-                        </li>
                     </ul>
                 </div>
+                <ul class="navbar-nav flex-grow-2">
+                    <li class="nav-item">
+                        <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Access" asp-action="Login">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Access" asp-action="LogOut">Salir</a>
+                    </li>
+                </ul>
             </div>
         </nav>
 
