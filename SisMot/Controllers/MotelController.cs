@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SisMot.Models;
 using SisMot.Repositories;
 using System.Security.Claims;
 
 namespace SisMot.Controllers
 {
+    
     public class MotelController : Controller
     {
         private readonly IMotelRepository _motelRepository;

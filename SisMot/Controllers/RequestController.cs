@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SisMot.Helpers;
 using SisMot.Models;
@@ -6,6 +7,7 @@ using SisMot.Repositories;
 
 namespace SisMot.Controllers;
 
+[Authorize]
 public class RequestController : Controller
 {
     private readonly IRequestMotelRepository _requestRepository;
