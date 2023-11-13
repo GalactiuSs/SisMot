@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SisMot.Data;
 using SisMot.Models;
+using SisMot.Models.CustomModels;
 using SisMot.Repositories;
 
 namespace SisMot.Services
@@ -11,11 +10,13 @@ namespace SisMot.Services
     {
         private readonly DbsisMotContext _context;
         private readonly IRequestRepository _requestRepository;
+        private readonly IPhotoRepository _photoRepository;
 
-        public MotelService(DbsisMotContext context, IRequestRepository requestRepository)
+        public MotelService(DbsisMotContext context, IRequestRepository requestRepository, IPhotoRepository photoRepository)
         {
             _context = context;
             _requestRepository = requestRepository;
+            _photoRepository = photoRepository;
         }
 
         public async Task<bool> CreateMotel(Motel motel)
@@ -31,7 +32,7 @@ namespace SisMot.Services
 
         public async Task<bool> DeleteMotel(int id)
         {
-            var findMotel = await GetMotel(id);
+            var findMotel = await GetSingleMotel(id);
             if (findMotel != null)
             {
                 findMotel.Status = 0;
@@ -57,20 +58,51 @@ namespace SisMot.Services
             return getMotels;
         }
 
-        public async Task<Motel> GetMotel(int id)
+        public async Task<MotelPhotosDTO> GetMotel(int id)
         {
-            var getMotel = await _context.Motels.FirstOrDefaultAsync(m => m.Id.Equals(id));
+            var getMotelPhotos = await _photoRepository.GetPhotosByMotel(id);
+            var getMotel = await _context.Motels.Where(motel => motel.Id.Equals(id))
+                .Select(motel => new Motel()
+                {
+                    Id = motel.Id,
+                    Name = motel.Name,
+                    Description = motel.Description,
+                    Price = motel.Price,
+                    PhoneNumber = motel.PhoneNumber,
+                    Latitude = motel.Latitude,
+                    Longitude = motel.Longitude
+                }).FirstOrDefaultAsync();
+            getMotelPhotos.MotelId = getMotel.Id;
+            getMotelPhotos.MotelName = getMotel.Name;
+            getMotelPhotos.MotelDescription = getMotel.Description;
+            getMotelPhotos.MotelPrice = getMotel.Price;
+            getMotelPhotos.MotelPhoneNumber = getMotel.PhoneNumber;
+            getMotelPhotos.MotelLatitude = getMotel.Latitude;
+            getMotelPhotos.MotelLongitude = getMotel.Longitude;
             if (getMotel != null)
-                return getMotel;
+                return getMotelPhotos;
             return null!;
         }
 
-        public async Task<bool> UpdateMotel(int id, Motel motel)
+        private async Task<Motel> GetSingleMotel(int id)
         {
-            var findMotel = await GetMotel(id);
+            var getMotel = await _context.Motels.FirstOrDefaultAsync(m => m.Id.Equals(id));
+            return getMotel;
+        }
+
+        public async Task<bool> UpdateMotel(MotelPhotosDTO motelPhotosDto)
+        {
+            var findMotel = await GetSingleMotel(motelPhotosDto.MotelId);
             if (findMotel != null)
             {
-                _context.Entry(motel).State = EntityState.Modified;
+                findMotel.Name = motelPhotosDto.MotelName;
+                findMotel.Description = motelPhotosDto.MotelDescription;
+                findMotel.Price = motelPhotosDto.MotelPrice;
+                findMotel.PhoneNumber = motelPhotosDto.MotelPhoneNumber;
+                findMotel.Latitude = motelPhotosDto.MotelLatitude;
+                findMotel.Longitude = motelPhotosDto.MotelLongitude;
+                findMotel.LastUpdate = DateTime.Now;
+                _context.Entry(findMotel).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -79,7 +111,11 @@ namespace SisMot.Services
 
         public async Task<List<Motel>> GetMotelsByOwner(int id)
         {
-            var motels = await _context.Motels.Where(motel => motel.PersonId == id).ToListAsync();
+            var motels = await _context.PersonRequests
+                .Where(r => r.PersonId.Equals(id) && r.StatusRequest.Equals(1))
+                .Select(r => r.Motel)
+                .Where(m => m.Status.Equals(1))
+                .ToListAsync();
             return motels;
         }
     }

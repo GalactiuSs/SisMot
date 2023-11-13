@@ -1,6 +1,8 @@
-﻿    using SisMot.Data;
+﻿    using Microsoft.EntityFrameworkCore;
+    using SisMot.Data;
 using SisMot.Models;
-using SisMot.Repositories;
+    using SisMot.Models.CustomModels;
+    using SisMot.Repositories;
 
 namespace SisMot.Services
 {
@@ -15,9 +17,17 @@ namespace SisMot.Services
             _context = context;
         }
 
-        public Task<List<MotelPhoto>> GetPhotos(int motelId)
+        public async Task<MotelPhotosDTO> GetPhotosByMotel(int motelId)
         {
-            throw new NotImplementedException();
+            MotelPhotosDTO motelPhotosDto = new();
+            var paths = await _context.MotelPhotos.Where(photo => photo.MotelId.Equals(motelId))
+                .Select(path => path.PathPhotoMotel).ToListAsync();
+            if (paths.Count > 0)
+            {
+                motelPhotosDto.MotelPhotos = paths;
+                return motelPhotosDto;
+            }
+            return motelPhotosDto;
         }
 
         public async Task LoadedImages(List<IFormFile> photos, int motelId)

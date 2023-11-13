@@ -7,7 +7,7 @@
     <thead>
         <tr>
             <th>Motel</th>
-            
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -17,21 +17,9 @@
                 <td>@request.Name</td>
                 
                 <td>
-                    @*<div class="mt-3 d-flex justify-content-between">
-                <button class="btn btn-warning"
-                data-id="@request.Id"
-                data-toggle="modal"
-                data-target="#modalRequest">
-                Ver solicitud
-                </button>
-
-                <button class="btn btn-success">Aceptar</button>
-                <button class="btn btn-danger">Rechazar</button>
-                </div>*@
                     <a asp-action="Edit" asp-controller="Motel" asp-route-id="@request.Id" class="btn btn-warning"> Editar Motel</a>
                 </td>
             </tr>
         }
-
     </tbody>
 </table>

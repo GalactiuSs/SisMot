@@ -2,6 +2,7 @@
 using SisMot.Models;
 using SisMot.Repositories;
 using System.Security.Claims;
+using SisMot.Models.CustomModels;
 
 namespace SisMot.Controllers
 {
@@ -33,12 +34,12 @@ namespace SisMot.Controllers
             return View(getMotel);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Edit(int id, Motel motel)
+        [HttpPost]
+        public async Task<IActionResult> Edit(MotelPhotosDTO motelPhotosDto)
         {
             if (ModelState.IsValid)
             {
-                var motelUpdated = await _motelRepository.UpdateMotel(id, motel);
+                    var motelUpdated = await _motelRepository.UpdateMotel(motelPhotosDto);
                 if (motelUpdated is not false)
                 {
                     return RedirectToAction("Index", "Motel");
@@ -64,7 +65,5 @@ namespace SisMot.Controllers
             var motelByOwner = await _motelRepository.GetMotelsByOwner(int.Parse(ownerID));
             return View(motelByOwner);
         }
-
-
     }
 }

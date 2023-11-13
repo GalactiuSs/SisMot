@@ -2,6 +2,7 @@ namespace SisMot.Models.CustomModels;
 
 public class MotelPhotosDTO
 {
+    public int MotelId { get; set; }
     public string MotelName { get; set; }
     public string MotelDescription { get; set; }
     public string MotelPrice { get; set; }
