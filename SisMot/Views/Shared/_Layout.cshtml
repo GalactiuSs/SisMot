@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,13 +27,6 @@
                         <li class="nav-item" >
                             <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Motel" asp-action="Index">Inicio</a>
                         </li>
-                        @if (User.IsInRole("Administrador"))
-                        {
-                            <li class="nav-item">
-                                <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Request" asp-action="Index">Ver Solicitudes</a>
-                            </li>
-                        }
-                        
                         @if (User.IsInRole("Owner"))
                         {
                             <li class="nav-item">
@@ -40,6 +34,12 @@
                             </li>
                             <li class="nav-item">
                                 <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Motel" asp-action="GetMotelsByOwner">Mis Moteles</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item">
+                                <a style=" font-family: Oswald; font-size:20px;" class="nav-link text-dark" asp-area="" asp-controller="Request" asp-action="Index">Ver Solicitudes</a>
                             </li>
                         }
                     </ul>
@@ -68,7 +68,7 @@
 
     @*<footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - SisMot - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - WebApplication1 - <a asp-area="" asp-controller="Motel" asp-action="Privacy">Privacy</a>
         </div>
     </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
