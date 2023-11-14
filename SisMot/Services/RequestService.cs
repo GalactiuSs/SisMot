@@ -42,8 +42,9 @@ public class RequestService : IRequestRepository
 
     public async Task<List<PersonRequest>> GetAllRequest()
     {
-        var allRequests = await _context.PersonRequests.Where(r => r.StatusRequest.Equals(0)).ToListAsync();
+        var allRequests = await _context.PersonRequests.Include(m => m.Person).Where(r => r.StatusRequest.Equals(0)).ToListAsync(); /*Where(r => r.StatusRequest.Equals(0)).ToListAsync();*/
         return allRequests;
+
     }
 
     public async Task<PersonRequest> GetRequest(int id)
