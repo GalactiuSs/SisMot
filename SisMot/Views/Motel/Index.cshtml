@@ -1,62 +1,62 @@
 @using SisMot.Helpers
 @inject BingMap bing
+@model List<SisMot.Models.CustomModels.EditMotelDTO>
 @{
     ViewData["Title"] = "SISMOT";
 }
 <div class="container-fluid">
     <div class="row">
-
         <div class="col-md-6">
             <div class="row">
-                <div style="margin:10px;" class="col-md-5">
+                @foreach (var motel in Model)
+                {
                     <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 1</h4>
-                        <p style="margin:10px;">Párrafo 1</p>
+                        <div id="@motel.MotelId" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @if (motel.PhotosPaths != null)
+                                {
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100" src="../@Url.Content(motel.PhotosPaths.FirstOrDefault())" alt="...">
+                                    </div>
+                                    @foreach (var photo in motel.PhotosPaths)
+                                    {
+                                        <div class="carousel-item">
+                                            <img class="d-block w-100" src="../@Url.Content(photo)" alt="...">
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen predeterminada">
+                                }
+                            </div>
+                            <a class="carousel-control-prev" href="#@motel.MotelId" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#@motel.MotelId" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </a>
+                        </div>
+    
+                        <div class="card-body">
+                            <h4 class="modal-title">@motel.MotelName</h4>
+                            <div class="form-group">
+                                <label class="form-label">Precio:</label>
+                                <label>@motel.MotelPrice</label>
+                                <div class="mt-2">
+                                    <a class="btn btn-warning">Ver detalles</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div >
-                <div style="margin:10px;" class="col-md-5">
-                    <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 2</h4>
-                        <p style="margin:10px;">Párrafo 2</p>
-                    </div>
-                </div>
-                <div style="margin:10px;" class="col-md-5">
-                    <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 3</h4>
-                        <p style="margin:10px;">Párrafo 3</p>
-                    </div>
-                </div>
-                <div style="margin:10px;" class="col-md-5">
-                    <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 4</h4>
-                        <p style="margin:10px;">Párrafo 4</p>
-                    </div>
-                </div>
-                <div style="margin:10px;" class="col-md-5">
-                    <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 5</h4>
-                        <p style="margin:10px;">Párrafo 5</p>
-                    </div>
-                </div>
-                <div style="margin:10px;" class="col-md-5">
-                    <div style="margin:10px;" class="card">
-                        <img style="height:250px; width:250px; margin:10px;" src="../Resources/img/motel2.jpg" alt="Imagen 1">
-                        <h4 style="margin:10px;">Título 6</h4>
-                        <p style="margin:10px;">Párrafo 6</p>
-                    </div>
-                </div>
-
+                }
             </div>
         </div>
 
         <div class="col-md-6">
             <div id="map" dropzone="" style="width: 700px; height: 800px;"></div>
-
         </div>
     </div>
 </div>
@@ -66,26 +66,37 @@
 
         const txtLatitude = document.getElementById('txtLatitude');
         const txtLongitude = document.getElementById('txtLongitude');
-
         function loadMapScenario() {
             var map = new Microsoft.Maps.Map(document.getElementById('map'), {
                 center: new Microsoft.Maps.Location(-17.393496874429385, -66.15692841770928),
                 credentials: '@bing.Key',
-                zoom: 17
+                zoom: 15
             });
-            Microsoft.Maps.Events.addHandler(map, 'click', (e) => {
-                map.entities.clear();
-
-                var location = e.location;
-
-                // Crea un pin en esa ubicación
-                var pin = new Microsoft.Maps.Pushpin(location);
-
-                // Añade el pin al mapa
-                map.entities.push(pin)
-                txtLatitude.value = location.latitude;
-                txtLongitude.value = location.longitude;
-            })
+            // Microsoft.Maps.Events.addHandler(map, 'click', (e) => {
+            //     map.entities.clear();
+            //
+            //     var location = e.location;
+            //
+            //     // Crea un pin en esa ubicación
+            //     var pin = new Microsoft.Maps.Pushpin(location);
+            //
+            //     // Añade el pin al mapa
+            //     map.entities.push(pin)
+            //     txtLatitude.value = location.latitude;
+            //     txtLongitude.value = location.longitude;
+            // })
+            
+           @foreach (var motel in Model) {
+               <text>
+                   var location = new Microsoft.Maps.Location(
+                       @motel.MotelLatitude.ToString(System.Globalization.CultureInfo.InvariantCulture), 
+                       @motel.MotelLongitude.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                   var pushpin = new Microsoft.Maps.Pushpin(location, {
+                       title: '@motel.MotelName'
+                   });
+                   map.entities.push(pushpin);
+               </text>
+           }
         }
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>

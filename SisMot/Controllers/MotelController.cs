@@ -9,12 +9,17 @@ namespace SisMot.Controllers
     public class MotelController : Controller
     {
         private readonly IMotelRepository _motelRepository;
+        private readonly IPhotoRepository _photoRepository;
 
-        public MotelController(IMotelRepository motelRepository) => _motelRepository = motelRepository;
-
-        public IActionResult Index()
+        public MotelController(IMotelRepository motelRepository, IPhotoRepository photoRepository)
         {
-            var getMotels = _motelRepository.GetAllMotels();
+            _motelRepository = motelRepository;
+            _photoRepository = photoRepository;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var getMotels = await _motelRepository.GetMotelsWithPhotos();
             return View(getMotels);
         }
 
@@ -35,16 +40,14 @@ namespace SisMot.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(MotelPhotosDTO motelPhotosDto)
+        public async Task<IActionResult> Edit(EditMotelDTO motelPhotosDto)
         {
-            if (ModelState.IsValid)
+            if(motelPhotosDto.MotelPhotos != null)
+                await _photoRepository.LoadedImages(motelPhotosDto.MotelPhotos, motelPhotosDto.MotelId);
+            var motelUpdated = await _motelRepository.UpdateMotel(motelPhotosDto);
+            if (motelUpdated is not false)
             {
-                    var motelUpdated = await _motelRepository.UpdateMotel(motelPhotosDto);
-                if (motelUpdated is not false)
-                {
-                    return RedirectToAction("Index", "Motel");
-                }
-                return View();
+                return RedirectToAction("Index", "Motel");
             }
             return View();
         }
@@ -64,6 +67,14 @@ namespace SisMot.Controllers
             var ownerID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var motelByOwner = await _motelRepository.GetMotelsByOwner(int.Parse(ownerID));
             return View(motelByOwner);
+        }
+
+        public async Task<IActionResult> RemoveImageMotel(string imageId)
+        {
+            var deleted = await _photoRepository.RemoveImage(imageId);
+            if (deleted)
+                return Ok();
+            return NotFound();
         }
     }
 }

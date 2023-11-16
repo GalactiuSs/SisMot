@@ -17,14 +17,14 @@ namespace SisMot.Services
             _context = context;
         }
 
-        public async Task<MotelPhotosDTO> GetPhotosByMotel(int motelId)
+        public async Task<EditMotelDTO> GetPhotosByMotel(int motelId)
         {
-            MotelPhotosDTO motelPhotosDto = new();
+            EditMotelDTO motelPhotosDto = new();
             var paths = await _context.MotelPhotos.Where(photo => photo.MotelId.Equals(motelId))
                 .Select(path => path.PathPhotoMotel).ToListAsync();
             if (paths.Count > 0)
             {
-                motelPhotosDto.MotelPhotos = paths;
+                motelPhotosDto.PhotosPaths = paths;
                 return motelPhotosDto;
             }
             return motelPhotosDto;
@@ -63,6 +63,18 @@ namespace SisMot.Services
                 }
             }
             await _context.SaveChangesAsync();      
+        }
+
+        public async Task<bool> RemoveImage(string imageId)
+        {
+            var imageDeleted = await _context.MotelPhotos.FirstOrDefaultAsync(i => i.PathPhotoMotel == imageId);
+            if (imageDeleted != null)
+            {
+                _context.MotelPhotos.Remove(imageDeleted);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }
