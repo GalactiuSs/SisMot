@@ -10,6 +10,11 @@ html {
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  
+}
+
+.navbar-text{
+    color: peru;
 }
 
 html {
@@ -31,30 +36,6 @@ body {
     margin-bottom: 60px;
 }
 
-
-/*card {
-    width: 150px;
-    height: 150px;
-}*/
-
-/*.lateral {
-    margin-inline: auto;
-    padding-inline-start: var(--explore_padding-inline);
-    padding-inline-end: var(--explore_padding-inline);
-    background: var(--f-mkcy-f);
-}*/
-
-/*.container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin:10px;
-}
-
-card {
-    width: 150px;
-    height: 150px;
-}*/
 
 .card {
     width: 270px;

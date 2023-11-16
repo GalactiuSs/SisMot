@@ -3,27 +3,27 @@
 @inject BingMap bing
 
 <div class="col-md-8">
-    <h3>Formulario de Información del Motel</h3>
+    <h3 style="color: #4F3803; font-family: Oswald; font-size:26px;">Formulario de Información del Motel</h3>
     <div class="row">
         <div class="col-md-8">
             <form asp-action="Edit" asp-controller="Motel">
                 <!-- Informaci�n general del motel -->
-                <h4>Información general del motel</h4>
+                <h4 style="color: burlywood; font-family: Oswald;">Información general del motel</h4>
                 <div class="form-group">
                     <input asp-for="MotelId" hidden/>
-                    <label>Nombre del Motel:</label>
+                    <label style="color: burlywood; font-family: Oswald; font-size:20px">Nombre del Motel:</label>
                     <input type="text" class="form-control" asp-for="MotelName" required placeholder="Ingrese el nombre del Motel">
                 </div>
                 <div class="form-group">
-                    <label for="descripcionMotel">Breve descripción y ambiente:</label>
+                    <label style="color: burlywood; font-family: Oswald; font-size:20px" for="descripcionMotel">Breve descripción y ambiente:</label>
                     <textarea class="form-control" rows="4" asp-for="MotelDescription" required placeholder="Ingrese los detalles de las habitaciones"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Precio:</label>
+                    <label style="color: burlywood; font-family: Oswald; font-size:20px">Precio:</label>
                     <input type="number" class="form-control" asp-for="MotelPrice" required placeholder="Ingrese el precio por hora de la habitacion">
                 </div>
                 <div class="form-group">
-                    <label>Numero de Celular:</label>
+                    <label style="color: burlywood; font-family: Oswald; font-size:20px">Numero de Celular:</label>
                     <input type="number" class="form-control" asp-for="MotelPhoneNumber" required placeholder="Ingrese el numero de Celular">
                 </div>
                 
@@ -36,16 +36,24 @@
                         }
                     }
                 </div>
+
                 <div class="form-group">
-                    <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
-                    <input type="file" class="form-control-file" asp-for="MotelPhotos" multiple accept="image/*">
-                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias im�genes (formato JPG, PNG, o GIF).</small>
+                    <label style="color: burlywood; font-family: Oswald; font-size:20px" for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
                 </div>
+                <div>
+                    <small style="color: burlywood; font-family: Oswald; font-size:20px" id="fotosHelp" class="form-text text-muted">Selecciona una o varias imagenes (formato JPG, PNG, o GIF).</small>
+                </div>
+                
+                <div>
+                    <input type="file" class="form-control-file" asp-for="MotelPhotos" multiple accept="image/*">
+                </div>
+
                 <div class="form-group">
                     <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any"/>
                     <input asp-for="MotelLongitude" id="txtLongitude" type="number" style="display: none" step="any" />
                 </div>
-                <input type="submit" class="btn btn-success" value="Actualizar"/>
+                <br />
+                <input style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;" type="submit" class="btn" value="Actualizar" />
             </form>
         </div>
         <div class="col-md-4">
