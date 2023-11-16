@@ -1,4 +1,4 @@
-@model SisMot.Models.CustomModels.MotelPhotosDTO
+@model SisMot.Models.CustomModels.EditMotelDTO
 @using SisMot.Helpers
 @inject BingMap bing
 
@@ -6,7 +6,7 @@
     <h3>Formulario de Información del Motel</h3>
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="Edit" asp-controller="Motel">
+            <form asp-action="Edit" asp-controller="Motel" enctype="multipart/form-data">
                 <!-- Informaci�n general del motel -->
                 <h4>Información general del motel</h4>
                 <div class="form-group">
@@ -28,18 +28,19 @@
                 </div>
                 
                 <div id="imagesContainer">
-                    @if (Model.MotelPhotos != null)
+                    @if (Model.PhotosPaths != null)
                     {
-                        foreach (var image in Model.MotelPhotos)
+                        foreach (var image in Model.PhotosPaths)
                         {
-                            <img src="../@Url.Content(image)" alt="Image" style="width: 140px; height: 140px" />
+                            <img src="../'@Url.Content(image)'" alt="Image" style="width: 140px; height: 140px"/>
+                            <button type="button" onclick="removeImage('@image')" class="btn btn-danger">Eliminar</button>                                                                                 
                         }
                     }
                 </div>
                 <div class="form-group">
                     <label for="fotosHabitaciones">Cargar fotos de las habitaciones:</label>
-                    <input type="file" class="form-control-file" asp-for="MotelPhotos" multiple accept="image/*">
-                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias im�genes (formato JPG, PNG, o GIF).</small>
+                    <input type="file" class="form-control-file" asp-for="MotelPhotos" multiple accept="image/*" onchange="mostrarVistaPrevia()"/>
+                    <small id="fotosHelp" class="form-text text-muted">Selecciona una o varias imágenes (formato JPG, PNG, o GIF).</small>
                 </div>
                 <div class="form-group">
                     <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any"/>
@@ -83,6 +84,38 @@
                 txtLatitude.value = location.latitude;
                 txtLongitude.value = location.longitude;
             })
+        }
+        
+        function removeImage(image){
+            
+            fetch(`/Motel/RemoveImageMotel?imageId=${image}`)
+            .then(res => {
+                if (res.ok){
+                    window.location.reload();
+                }
+                else {
+                    alert('No se pudo eliminar la imagen');
+                }
+            })
+            .catch(err => console.log(err))
+        }
+        
+        function mostrarVistaPrevia() {
+            var input = document.getElementById('imagenInput');
+            var vistaPrevia = document.getElementById('vistaPrevia');
+            vistaPrevia.innerHTML = '';
+
+            for (var i = 0; i < input.files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imagen = document.createElement('img');
+                    imagen.src = e.target.result;
+                    imagen.width = 140;
+                    imagen.height = 140;
+                    vistaPrevia.appendChild(imagen);
+                };
+                reader.readAsDataURL(input.files[i]);
+            }
         }
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>

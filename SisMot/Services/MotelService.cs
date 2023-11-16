@@ -45,20 +45,41 @@ namespace SisMot.Services
         public async Task<List<Motel>> GetAllMotels()
         {
             var requestsList = await _requestRepository.GetAcceptedRequests();
-            var getMotels = await _context.Motels.Join(requestsList, m => m.Id, r => r.MotelId, 
+            var motelsList = await _context.Motels.Where(m => m.Status.Equals(1)).ToListAsync();
+            var getMotels = motelsList.Join(requestsList, m => m.Id, r => r.MotelId, 
                 (m, r) => new Motel()
                 {
+                    Id = m.Id,
                     Name = m.Name,
                     Description = m.Description,
                     Price = m.Price,
                     PhoneNumber = m.PhoneNumber,
                     Latitude = m.Latitude,
                     Longitude = m.Longitude 
-                }).Where(m => m.Status.Equals(1)).ToListAsync();
+                }).ToList();
             return getMotels;
         }
 
-        public async Task<MotelPhotosDTO> GetMotel(int id)
+        public async Task<List<EditMotelDTO>> GetMotelsWithPhotos()
+        {
+            List<EditMotelDTO> motelPhotosDtos = new();
+            var motels = await GetAllMotels();
+            foreach (var motel in motels)
+            {
+                var motelPhoto = await _photoRepository.GetPhotosByMotel(motel.Id);
+                motelPhoto.MotelId = motel.Id;
+                motelPhoto.MotelName = motel.Name;
+                motelPhoto.MotelDescription = motel.Description;
+                motelPhoto.MotelPrice = motel.Price;
+                motelPhoto.MotelPhoneNumber = motel.PhoneNumber;
+                motelPhoto.MotelLatitude = motel.Latitude;
+                motelPhoto.MotelLongitude = motel.Longitude;
+                motelPhotosDtos.Add(motelPhoto);
+            }
+            return motelPhotosDtos;
+        }
+
+        public async Task<EditMotelDTO> GetMotel(int id)
         {
             var getMotelPhotos = await _photoRepository.GetPhotosByMotel(id);
             var getMotel = await _context.Motels.Where(motel => motel.Id.Equals(id))
@@ -90,9 +111,10 @@ namespace SisMot.Services
             return getMotel;
         }
 
-        public async Task<bool> UpdateMotel(MotelPhotosDTO motelPhotosDto)
+        public async Task<bool> UpdateMotel(EditMotelDTO motelPhotosDto)
         {
             var findMotel = await GetSingleMotel(motelPhotosDto.MotelId);
+            //  var finphotos = await _photoRepository.LoadedImages()
             if (findMotel != null)
             {
                 findMotel.Name = motelPhotosDto.MotelName;
