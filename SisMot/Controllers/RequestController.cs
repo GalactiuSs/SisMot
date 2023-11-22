@@ -53,7 +53,7 @@ namespace SisMot.Controllers
             };
             var send = await _requestRepository.AddMotelWithRequest(motel, request, requestDto.Photos);
             if (send is not false)
-                return RedirectToAction("Index", "Motel");
+                return RedirectToAction("SendRequest", "Request");
             return View();
         }
 

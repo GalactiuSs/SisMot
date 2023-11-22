@@ -48,7 +48,7 @@ namespace SisMot.Controllers
             var motelUpdated = await _motelRepository.UpdateMotel(motelPhotosDto);
             if (motelUpdated is not false)
             {
-                return RedirectToAction("Index", "Motel");
+                return RedirectToAction("GetMotelsByOwner", "Motel");
             }
             return View();
         }
