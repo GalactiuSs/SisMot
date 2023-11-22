@@ -1,5 +1,6 @@
 @model SisMot.Models.CustomModels.EditMotelDTO
 @using SisMot.Helpers
+@using System.Web
 @inject BingMap bing
 
 <div class="col-md-8">
@@ -32,8 +33,8 @@
                     {
                         foreach (var image in Model.PhotosPaths)
                         {
-                            <img src="../'@Url.Content(image)'" alt="Image" style="width: 140px; height: 140px"/>
-                            <button type="button" onclick="removeImage('@image')" class="btn btn-danger">Eliminar</button>                                                                                 
+                            <img src="../@Url.Content(image)" alt="Image" style="width: 140px; height: 140px"/>
+                            <button type="button" onclick="removeImage('@Html.Raw(HttpUtility.UrlEncode(image))')" class="btn btn-danger">Eliminar</button>                                                                                 
                         }
                     }
                 </div>
@@ -95,17 +96,17 @@
         }
         
         function removeImage(image){
-            
-            fetch(`/Motel/RemoveImageMotel?imageId=${image}`)
-            .then(res => {
-                if (res.ok){
-                    window.location.reload();
-                }
-                else {
-                    alert('No se pudo eliminar la imagen');
-                }
-            })
-            .catch(err => console.log(err))
+            const encodedImage = decodeURIComponent(image);
+            fetch(`/Motel/RemoveImageMotel?imageId=${encodedImage}`)
+                .then(res => {
+                    if (res.ok){
+                        window.location.reload();
+                    }
+                    else {
+                        alert('No se pudo eliminar la imagen');
+                    }
+                })
+                .catch(err => console.log(err))
         }
         
         function mostrarVistaPrevia() {

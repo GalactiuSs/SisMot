@@ -2,6 +2,7 @@
 using SisMot.Models;
 using SisMot.Repositories;
 using System.Security.Claims;
+using System.Text;
 using SisMot.Models.CustomModels;
 
 namespace SisMot.Controllers
@@ -28,7 +29,7 @@ namespace SisMot.Controllers
             var viewMotel = await _motelRepository.GetMotel(id);
             if (viewMotel != null)
             {
-                return RedirectToAction("Details", "Motel");
+                return View(viewMotel);
             }
             return View();
         }
