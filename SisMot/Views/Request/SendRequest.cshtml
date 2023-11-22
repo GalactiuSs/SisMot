@@ -7,7 +7,7 @@
     <h3 style="color: #4F3803; font-family: Oswald;">Formulario de Información del Motel</h3>
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="SendRequest" asp-controller="Request" method="post" enctype="multipart/form-data">
+            <form asp-action="SendRequest" asp-controller="Request" onsubmit="mostrarMensajeDeAlerta()" method="post" enctype="multipart/form-data">
                 <!-- Información general del motel -->
                 <h4 style="color: burlywood; font-family: Oswald;">Información general del motel</h4>
                 <div class="form-group">
@@ -102,6 +102,11 @@
                 };
                 reader.readAsDataURL(input.files[i]);
             }
+        }
+        
+        function mostrarMensajeDeAlerta() {
+            alert('Se insertó el registro correctamente');
+            window.location.reload();
         }
     </script>
 
