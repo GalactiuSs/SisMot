@@ -7,44 +7,45 @@
 }
 
 <div class="col-md-8">
-    <h5 style="color: #4F3803; font-family: Oswald; font-size:26px;">@Model.MotelName</h5>
-    <div>
+    <h1 style="color: burlywood; font-family: Oswald;">@Model.MotelName</h1>
+    <div >
         @if (Model.PhotosPaths != null)
         {
             foreach (var image in Model.PhotosPaths)
-            {
-                <img src="../@Url.Content(image)" alt="Image" style="width: 140px; height: 140px"/>
+        {
+                <img src="../@Url.Content(image)" alt="Image" style="height:170px; width:170px;"/>
             }
         }
     </div>
+    <br/>
     <div class="row">
         <div class="col-md-8">
-            <h4 style="color: burlywood; font-family: Oswald;">Información general del motel</h4>
+            <h2 style="color: #4F3803; font-family: Oswald;">Información del motel</h2>
             <div class="form-group">
-                <label style="color: burlywood; font-family: Oswald; font-size:20px" for="descripcionMotel">Breve descripción y ambiente:</label>
-                <textarea class="form-control" asp-for="MotelDescription" rows="4" disabled></textarea>
+                <label style="color: #4F3803; font-family: Oswald; font-size:22px;" for="descripcionMotel">Breve descripción y ambiente:</label>
+                <textarea style="font-size:22px; background:none; border-color:burlywood; color:burlywood" class="form-control" asp-for="MotelDescription" rows="4" disabled></textarea>
             </div>
             <div class="form-group">
-                <label style="color: burlywood; font-family: Oswald; font-size:20px">Precio:</label>
-                <input class="form-control" asp-for="MotelPrice" disabled>
+                <label style="color: #4F3803; font-family: Oswald; font-size:22px;">Precio Bs:</label>
+                <input style="font-size:22px; background:none; border-color:burlywood; color:burlywood" class="form-control" asp-for="MotelPrice" disabled>
             </div>
             <div class="form-group">
-                <label style="color: burlywood; font-family: Oswald; font-size:20px">Numero de Celular:</label>
-                <input type="number" class="form-control" asp-for="MotelPhoneNumber" disabled>
+                <label style="color: #4F3803; font-family: Oswald; font-size:22px;">Numero de Celular:</label>
+                <input style="font-size:22px; background:none; border-color:burlywood; color:burlywood" type="number" class="form-control" asp-for="MotelPhoneNumber" disabled>
             </div>
             <div class="form-group">
                 <input asp-for="MotelLatitude" id="txtLatitude" type="number" style="display: none" step="any" disabled/>
                 <input asp-for="MotelLongitude" id="txtLongitude" type="number" style="display: none" step="any" disabled />
             </div>
             <div>
-                <a class="btn btn-primary" asp-action="Index" asp-controller="Motel">Volver</a>
+                <a class="btn btn-primary" style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;" asp-action="Index" asp-controller="Motel">Volver</a>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div id="map" dropzone="" style="width: 700px; height: 700px;"></div>
+            <div id="map" dropzone="" style="margin-top:20px; width: 450px; height: 450px;"></div>
 
         </div>
-        <br/>
     </div>
 </div>
 
@@ -69,6 +70,27 @@
             map.entities.push(pin);
             updatedLocation(map);
         }
+
+        //const fetchPhotos = async () => {
+        //    const response = await fetch(`SisMot`);
+        //    const photos = await response.json();
+
+        //    photos.forEach(photo => {
+        //        const container = document.createElement('div');
+        //        container.className = 'image-container';
+
+        //        const img = document.createElement('img');
+        //        img.src = photo.url;
+        //        img.alt = photo.description;
+
+        //        container.appendChild(img);
+        //        document.getElementById('gallery').appendChild(container);
+        //    });
+        //};
+
+        //fetchPhotos();
     </script>
     <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?key=@bing.Key&callback=loadMapScenario' async defer></script>
+    
+    
 }
